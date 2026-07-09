@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ColumnController;
+use App\Http\Controllers\CardController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -19,4 +20,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/boards/{board}/columns', [ColumnController::class, 'store']);
     Route::put('/columns/{column}', [ColumnController::class, 'update']);
     Route::delete('/columns/{column}', [ColumnController::class, 'destroy']);
+    
+    Route::post('/cards', [CardController::class, 'store']);
+    Route::put('/cards/{card}', [CardController::class, 'update']);
+    Route::patch('/cards/{card}/move', [CardController::class, 'move']);
+    Route::delete('/cards/{card}', [CardController::class, 'destroy']);
 });
