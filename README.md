@@ -1,58 +1,230 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kanban Board API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+RESTful API profesional untuk aplikasi Kanban Board (seperti Trello) yang dibangun menggunakan **Laravel 11** dan **PHP 8.5**. API ini dilengkapi dengan sistem keamanan berbasis token menggunakan **Laravel Sanctum**, validasi hak kepemilikan data yang ketat (authorization), serta fitur pengelolaan manajemen proyek yang dinamis.
 
-## About Laravel
+* **Nama Project:** Mini Kanban Board API
+* **Nama Peserta:** Marga Reta Novia Putri
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Teknologi & Environment yang Digunakan
+* **Backend Framework:** Laravel 11
+* **Language Version:** PHP 8.5
+* **Authentication:** Laravel Sanctum (Token-Based Authentication)
+* **Database:** MySQL
+* **API Testing Tool:** Postman
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Fitur Utama
+1.  **Authentication & Profile:** Registrasi, Login, proteksi Route dengan Middleware Sanctum, serta manajemen data profil pengguna.
+2.  **Board Management (Papan Kanban):** CRUD Papan Proyek dengan otorisasi ketat—pengguna hanya dapat melihat, mengedit, dan menghapus Papan miliknya sendiri.
+3.  **Column Management (Kolom):** Penambahan dan pengubahan sekat kolom secara dinamis (Default: *Backlog, To Do, In Progress, Done*). Kolom memiliki proteksi *Cascade* aman, serta **tidak dapat dihapus jika masih terdapat Kartu tugas di dalamnya**.
+4.  **Card Management (Kartu Tugas):** Pengelolaan penuh kartu tugas yang mencakup Judul tugas, Deskripsi, Prioritas (*High/Medium/Low*), dan tenggat waktu (*Deadline*).
+5.  **Move Card Endpoint:** Fitur perpindahan kartu antar kolom secara dinamis dengan validasi lintas papan untuk memastikan integritas data.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ⚙️ Cara Instalasi & Menjalankan Backend
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Ikuti langkah-langkah di bawah ini untuk memasang dan menjalankan proyek secara lokal:
 
-## Agentic Development
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/margaretanp/kanban_api.git 
+   ```
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+2. **Install Dependencies**
+   ```bash
+   composer install
+   ```
 
-```bash
-composer require laravel/boost --dev
+3. **Konfigurasi Environment**
+   Salin file template `.env.example` menjadi `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   *Buka file `.env` menggunakan teks editor lalu pastikan konfigurasi database MySQL lokal Anda sudah sesuai:*
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=kanban_db
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-php artisan boost:install
-```
+4. **Generate Application Key**
+   ```bash
+   php artisan key:generate
+   ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+5. **Migrasi & Seed Database**
+   Perintah ini akan menyusun ulang seluruh struktur tabel secara berurutan (*Boards -> Columns -> Cards*) serta mengeksekusi robot pengisi data otomatis (*Seeder*):
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
 
-## Contributing
+6. **Jalankan Aplikasi**
+   ```bash
+   php artisan serve
+   ```
+   Server lokal akan berjalan di alamat `http://127.0.0.1:8000`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🔐 Credential Login (Hasil Seeder)
+Anda dapat menggunakan akun uji coba di bawah ini pada endpoint `POST /api/login` untuk mendapatkan *Bearer Token*:
+* **Akun 1 (Admin/User 1):** `admin@admin.com` | Password: `password123`
+* **Akun 2 (User 2):** `user1@example.com` | Password: `password123`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🧪 Cara Testing API & Collection Postman
+1. Buka aplikasi **Postman**.
+2. Klik tombol **Import** di pojok kiri atas, pilih file **`postman_collection.json`** yang terletak di root folder proyek ini.
+3. Jalankan request **Login** di bawah folder *1. Authentication & Profile*.
+4. Salin string `token` panjang yang didapatkan dari response sukses.
+5. Pada request lainnya, masuk ke tab **Authorization**, pilih tipe **Bearer Token**, lalu tempelkan (*paste*) token tersebut ke kolom yang tersedia untuk membuka gembok akses API.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 📡 Daftar Endpoint API
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 1. Authentication & Profile
+| Method | Endpoint | Deskripsi | Auth (Bearer) |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/register` | Mendaftarkan pengguna baru | Tidak |
+| `POST` | `/api/login` | Autentikasi pengguna & mendapatkan token | Tidak |
+| `GET` | `/api/profile` | Mengambil data profil pengguna yang login | **Ya** |
+| `PUT` | `/api/profile` | Memperbarui data profil pengguna | **Ya** |
+| `POST` | `/api/logout` | Menghapus token aktif & keluar dari sistem | **Ya** |
+
+### 2. Boards (Papan Kanban)
+| Method | Endpoint | Deskripsi | Auth (Bearer) |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/boards` | Melihat semua papan milik pengguna aktif | **Ya** |
+| `POST` | `/api/boards` | Membuat papan kanban baru | **Ya** |
+| `GET` | `/api/boards/{id}` | Melihat detail papan tertentu beserta seluruh Kolom & Kartunya | **Ya** |
+| `PUT` | `/api/boards/{id}` | Mengubah judul papan (Otorisasi Pemilik) | **Ya** |
+| `DELETE` | `/api/boards/{id}` | Menghapus papan beserta seluruh isi di dalamnya (*Cascade*) | **Ya** |
+
+### 3. Columns (Sekat Kolom)
+| Method | Endpoint | Deskripsi | Auth (Bearer) |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/boards/{id}/columns` | Menambahkan kolom baru ke dalam papan tertentu | **Ya** |
+| `PUT` | `/api/columns/{id}` | Mengubah nama sekat kolom | **Ya** |
+| `DELETE` | `/api/columns/{id}` | Menghapus sekat kolom **(Hanya jika kosong dari kartu)** | **Ya** |
+
+### 4. Cards (Kartu Tugas)
+| Method | Endpoint | Deskripsi | Auth (Bearer) |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/cards` | Membuat kartu tugas baru di kolom tertentu | **Ya** |
+| `PUT` | `/api/cards/{id}` | Memperbarui rincian data kartu tugas | **Ya** |
+| `PATCH` | `/api/cards/{id}/move` | Memindahkan kartu tugas ke kolom target | **Ya** |
+| `DELETE` | `/api/cards/{id}` | Menghapus kartu tugas secara permanen | **Ya** |
+
+---
+
+## 📝 Contoh Request dan Response Realistis
+
+### 1. Login Pengguna (`POST /api/login`)
+* **Request Body (JSON):**
+    ```json
+    {
+        "email": "admin@admin.com",
+        "password": "password123"
+    }
+    ```
+* **Response Sukses (200 OK):**
+    ```json
+    {
+        "message": "Login success",
+        "token": "1|sanctum_generated_token_string_xyz...",
+        "user": {
+            "id": 1,
+            "name": "Admin",
+            "email": "admin@admin.com"
+        }
+    }
+    ```
+
+### 2. Memperbarui Profil (`PUT /api/profile`)
+* **Request Body (JSON):**
+    ```json
+    {
+        "name": "Margareta Novia",
+        "email": "admin@admin.com"
+    }
+    ```
+* **Response Sukses (200 OK):**
+    ```json
+    {
+        "message": "Profile updated successfully",
+        "user": {
+            "id": 1,
+            "name": "Margareta Novia",
+            "email": "admin@admin.com"
+        }
+    }
+    ```
+
+### 3. Membuat Kartu Baru (`POST /api/cards`)
+* **Request Body (JSON):**
+    ```json
+    {
+        "board_id": 1,
+        "column_id": 1,
+        "title": "Membuat Halaman Login",
+        "description": "Membuat form input email dan password terproteksi Sanctum",
+        "priority": "High",
+        "deadline": "2026-07-20"
+    }
+    ```
+* **Response Sukses (201 Created):**
+    ```json
+    {
+        "message": "Card created successfully",
+        "data": {
+            "id": 5,
+            "board_id": 1,
+            "column_id": 1,
+            "title": "Membuat Halaman Login",
+            "description": "Membuat form input email dan password terproteksi Sanctum",
+            "priority": "High",
+            "deadline": "2026-07-20",
+            "updated_at": "2026-07-10T06:20:00.000000Z",
+            "created_at": "2026-07-10T06:20:00.000000Z"
+        }
+    }
+    ```
+
+### 4. Memindahkan Kartu Antar Kolom (`PATCH /api/cards/{id}/move`)
+* **URL Endpoint:** `http://127.0.0.1:8000/api/cards/1/move`
+* **Request Body (JSON):**
+    ```json
+    {
+        "target_column_id": 2
+    }
+    ```
+* **Response Sukses (200 OK):**
+    ```json
+    {
+        "message": "Card moved successfully",
+        "card": {
+            "id": 1,
+            "title": "Tugas contoh 1",
+            "column_id": 2,
+            "updated_at": "2026-07-10T06:20:00.000000Z"
+        }
+    }
+    ```
+
+### 5. Validasi Error Hapus Kolom yang Berisi Kartu (`DELETE /api/columns/{id}`)
+* **URL Endpoint:** `http://127.0.0.1:8000/api/columns/1`
+* **Response Gagal (400 Bad Request):**
+    ```json
+    {
+        "message": "Kolom tidak dapat dihapus karena masih memiliki card"
+    }
+    ```
